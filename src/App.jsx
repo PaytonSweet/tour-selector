@@ -14,7 +14,7 @@ function App() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch('https://course-api.com/react-tours-project');
+        const response = await fetch('/api/react-tours-project');
         if (!response.ok) {
           throw new Error('Failed to fetch tours');
         }
