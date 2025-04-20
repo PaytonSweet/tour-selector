@@ -10,12 +10,13 @@ function Gallery({ tours, loading, error, selectedDestination, setTours }) {
     return <h2>Error: {error}</h2>;
   }
 
+  // Filter tours based on the selected name
   const filteredTours = selectedDestination
-    ? tours.filter((tour) => tour.destination === selectedDestination)
+    ? tours.filter((tour) => tour.name === selectedDestination)
     : tours;
 
   if (filteredTours.length === 0) {
-    return <h2>No tours available for the selected destination.</h2>;
+    return <h2>No tours available for the selected tour.</h2>;
   }
 
   const handleRemoveTour = (id) => {

@@ -9,42 +9,55 @@ function App() {
   const [error, setError] = useState(null);
   const [selectedDestination, setSelectedDestination] = useState('');
 
-  useEffect(() => {
-    const fetchTours = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch('/api/react-tours-project');
-        if (!response.ok) {
-          throw new Error('Failed to fetch tours');
-        }
-        const data = await response.json();
-        setTours(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchTours = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/react-tours-project');
+      if (!response.ok) {
+        throw new Error('Failed to fetch tours');
       }
-    };
+      const data = await response.json();
+      setTours(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTours();
   }, []);
+
+  const handleRefresh = () => {
+    fetchTours();
+  };
 
   return (
     <div className="App">
       <h1>Our Tours</h1>
-      <DestinationSelector
-        tours={tours}
-        selectedDestination={selectedDestination}
-        setSelectedDestination={setSelectedDestination}
-      />
-      <Gallery
-        tours={tours}
-        loading={loading}
-        error={error}
-        selectedDestination={selectedDestination}
-        setTours={setTours}
-      />
+      {tours.length === 0 && !loading && !error ? (
+        <div>
+          <h2>No tours left. Refresh to reload.</h2>
+          <button onClick={handleRefresh}>Refresh</button>
+        </div>
+      ) : (
+        <>
+          <DestinationSelector
+            tours={tours}
+            selectedDestination={selectedDestination}
+            setSelectedDestination={setSelectedDestination}
+          />
+          <Gallery
+            tours={tours}
+            loading={loading}
+            error={error}
+            selectedDestination={selectedDestination}
+            setTours={setTours}
+          />
+        </>
+      )}
     </div>
   );
 }
