@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import DestinationSelector from './components/DestinationSelector';
+import Gallery from './components/Gallery';
 
 function App() {
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedDestination, setSelectedDestination] = useState('');
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -27,30 +30,21 @@ function App() {
     fetchTours();
   }, []);
 
-  if (loading) {
-    return <h2>Loading...</h2>;
-  }
-
-  if (error) {
-    return <h2>Error: {error}</h2>;
-  }
-
   return (
     <div className="App">
       <h1>Our Tours</h1>
-      {tours.length === 0 ? (
-        <h2>No tours available</h2>
-      ) : (
-        <ul>
-          {tours.map((tour) => (
-            <li key={tour.id}>
-              <h3>{tour.name}</h3>
-              <p>{tour.info}</p>
-              <p>Price: ${tour.price}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <DestinationSelector
+        tours={tours}
+        selectedDestination={selectedDestination}
+        setSelectedDestination={setSelectedDestination}
+      />
+      <Gallery
+        tours={tours}
+        loading={loading}
+        error={error}
+        selectedDestination={selectedDestination}
+        setTours={setTours}
+      />
     </div>
   );
 }
